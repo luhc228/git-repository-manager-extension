@@ -1,0 +1,60 @@
+{
+  "name": "git-repository-manager",
+  "displayName": "Git Repository Manager",
+  "description": "A VS Code extension for managing your local git repositories easier.",
+  "publisher": "luhc228",
+  "version": "0.0.0",
+  "engines": {
+    "vscode": "^1.78.0"
+  },
+  "icon": "assets/logo.png",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Git User Config Manager",
+      "properties": {}
+    }
+  },
+  "scripts": {
+    "package": "vsce package --no-dependencies --allow-missing-repository",
+    "release": "vsce publish --no-dependencies --allow-missing-repository",
+    "vscode:prepublish": "pnpm run build",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --sourcemap --alias:@=./src",
+    "watch": "pnpm esbuild-base --watch",
+    "build": "tsc && pnpm esbuild-base --minify",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "test": "node ./out/test/runTest.js",
+    "eslint": "eslint --ext .js,.ts ./",
+    "eslint:fix": "pnpm run eslint --fix"
+  },
+  "devDependencies": {
+    "@applint/spec": "^1.2.3",
+    "@commitlint/cli": "^17.6.6",
+    "@types/fs-extra": "^11.0.1",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.78.0",
+    "@vscode/test-electron": "^2.3.0",
+    "esbuild": "^0.18.10",
+    "eslint": "^8.41.0",
+    "husky": "^8.0.3",
+    "mocha": "^10.2.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luhc228/git-repository-manager-extension"
+  },
+  "license": "MIT"
+}
