@@ -17,7 +17,7 @@
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
-      "title": "Git User Config Manager",
+      "title": "Git Repository Manager",
       "properties": {}
     }
   },
