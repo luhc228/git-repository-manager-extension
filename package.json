@@ -16,6 +16,35 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "git-repository-manager",
+          "title": "Git Repository Manager",
+          "icon": "./assets/sidebar-logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "git-repository-manager": [
+        {
+          "id": "welcome",
+          "name": "Welcome",
+          "when": "isInWorkspace"
+        },
+        {
+          "id": "gitRepositoryList",
+          "name": "Git Repositories",
+          "when": "isInWorkspace"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "welcome",
+        "contents": "Welcome to use Git Repository Manager extension. \n You can clone a git repository. \n[Clone Repository](command:git-repository-manager.showGitRepoInputBox) \n Or you can select one of your repositories in the tree view below."
+      }
+    ],
     "configuration": {
       "title": "Git Repository Manager",
       "properties": {}
@@ -50,7 +79,10 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "fs-extra": "^11.1.1"
+    "execa": "^7.1.1",
+    "fs-extra": "^11.1.1",
+    "giturl": "^2.0.0",
+    "simple-git": "^3.19.1"
   },
   "repository": {
     "type": "git",
