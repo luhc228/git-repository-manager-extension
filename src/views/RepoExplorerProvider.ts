@@ -5,7 +5,8 @@ import getRepoBaseDir from '@/utils/getRepoBaseDir';
 import { isGitRepo } from '@/utils/git';
 
 export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>, vscode.Disposable {
-  private _onDidChangeTreeData: vscode.EventEmitter<RepoFolder | undefined | void> = new vscode.EventEmitter<RepoFolder | undefined | void>();
+  private _onDidChangeTreeData: vscode.EventEmitter<RepoFolder | undefined | void> =
+    new vscode.EventEmitter<RepoFolder | undefined | void>();
   readonly onDidChangeTreeData: vscode.Event<RepoFolder | undefined | void> = this._onDidChangeTreeData.event;
   private _disposables: vscode.Disposable[] = [];
 
@@ -70,14 +71,11 @@ class RepoFolder extends vscode.TreeItem {
     super(label, collapsibleState);
   }
 
+  command = this.collapsibleState === vscode.TreeItemCollapsibleState.None
+    ? { command: 'repoExplorer.openRepo', title: 'Open Repository', arguments: [this] }
+    : undefined;
+
   iconPath = new vscode.ThemeIcon(this.collapsibleState === vscode.TreeItemCollapsibleState.None ? 'git-branch' : 'symbol-folder');
 
   contextValue = this.collapsibleState === vscode.TreeItemCollapsibleState.None ? 'repoFolder' : 'folder';
-}
-
-export function createTreeView(context: vscode.ExtensionContext) {
-  const treeDataProvider = new RepoExplorerProvider();
-  context.subscriptions.push(
-    vscode.window.createTreeView('repoExplorer', { treeDataProvider }),
-  );
 }

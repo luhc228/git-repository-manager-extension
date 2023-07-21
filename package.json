@@ -118,6 +118,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "conf": "^10.0.0",
     "execa": "^7.1.1",
     "fs-extra": "^11.1.1",
     "giturl": "^2.0.0",

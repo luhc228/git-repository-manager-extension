@@ -1,9 +1,11 @@
 import type { ExecaChildProcess } from 'execa';
 import * as vscode from 'vscode';
+import type { RepoExplorerProvider } from '@/views/RepoExplorerProvider';
+import findAllRepoPaths from '@/utils/findAllRepoPaths';
 
 export const CommandId = 'git-repository-manager.showCloneRepoProgress';
 
-export function registryShowCloneRepoProgress() {
+export function registryShowCloneRepoProgress(repoExplorerProvider: RepoExplorerProvider) {
   return vscode.commands.registerCommand(
     CommandId,
     (
@@ -24,6 +26,10 @@ export function registryShowCloneRepoProgress() {
         return gitCloneSubprocess;
       }).then(
         () => {
+          // Get latest local repo.
+          repoExplorerProvider.refresh();
+          findAllRepoPaths();
+
           const confirmText = 'Yes';
           vscode.window.showInformationMessage(
             `Clone repository to ${localRepoPath} Successfully! Do you want open it?`,
