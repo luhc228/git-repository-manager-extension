@@ -16,6 +16,18 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "repoExplorer.refresh",
+        "title": "Refresh Repositories",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "repoExplorer.openRepo",
+        "title": "Open Repository",
+        "icon": "$(arrow-right)"
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {
@@ -33,7 +45,7 @@
           "when": "isInWorkspace"
         },
         {
-          "id": "gitRepositoryList",
+          "id": "repoExplorer",
           "name": "Git Repositories",
           "when": "isInWorkspace"
         }
@@ -45,6 +57,22 @@
         "contents": "Welcome to use Git Repository Manager extension. \n You can clone a git repository. \n[Clone Repository](command:git-repository-manager.showGitRepoInputBox) \n Or you can open one of your repositories in the tree view below."
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "repoExplorer.refresh",
+          "when": "view == repoExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "repoExplorer.openRepo",
+          "when": "viewItem == repoFolder",
+          "group": "inline"
+        }
+      ]
+    },
     "configuration": {
       "title": "Git Repository Manager",
       "properties": {

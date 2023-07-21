@@ -25,7 +25,7 @@ export default async function cloneRepo(gitUrl: string) {
     console.error(`Can't match the domain name from ${gitRepoPath}.`);
     return;
   }
-  gitRepoPath = gitRepoPath.replace(/^([^/]+)/, repoDirsMap[matchedResult[1]] || '');
+  gitRepoPath = repoDirsMap[matchedResult[1]] ? gitRepoPath.replace(/^([^/]+)/, repoDirsMap[matchedResult[1]]) : gitRepoPath;
   const localPath = path.join(
     repoBaseDir,
     gitRepoPath,
