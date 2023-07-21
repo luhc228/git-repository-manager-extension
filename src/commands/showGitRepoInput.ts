@@ -1,4 +1,4 @@
-import { cloneRepo } from '@/cloneRepo';
+import cloneRepo from '@/cloneRepo';
 import * as vscode from 'vscode';
 
 export const CommandId = 'git-repository-manager.showGitRepoInputBox';

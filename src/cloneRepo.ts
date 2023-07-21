@@ -4,12 +4,31 @@ import * as path from 'path';
 import giturl from 'giturl';
 import { execa } from 'execa';
 import { CommandId as ShowCloneRepoProgressCommandId } from '@/commands/showCloneRepoProgress';
+import getRepoBaseDir from '@/utils/getRepoBaseDir';
 
-export function cloneRepo(gitUrl: string) {
+const RepoDirsMapPropertyName = 'git-repository-manager.reposDirMap';
+
+export default async function cloneRepo(gitUrl: string) {
   const url = giturl.parse(gitUrl) as string;
+
+  const repoBaseDir = await getRepoBaseDir();
+  if (!repoBaseDir) {
+    return;
+  }
+  const repoDirsMap = vscode.workspace
+    .getConfiguration()
+    .get(RepoDirsMapPropertyName) as Record<string, string>;
+  let gitRepoPath = url
+    .replace(/^https?:\/\//, '');
+  const matchedResult = gitRepoPath.match(/^([^/]+)/);
+  if (!matchedResult || !matchedResult[1]) {
+    console.error(`Can't match the domain name from ${gitRepoPath}.`);
+    return;
+  }
+  gitRepoPath = gitRepoPath.replace(/^([^/]+)/, repoDirsMap[matchedResult[1]] || '');
   const localPath = path.join(
-    '/Users/luhc228/Code', // TODO:
-    url.replace(/^https?:\/\//, ''),
+    repoBaseDir,
+    gitRepoPath,
   );
 
   const abortController = new AbortController();

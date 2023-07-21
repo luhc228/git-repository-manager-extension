@@ -42,12 +42,23 @@
     "viewsWelcome": [
       {
         "view": "welcome",
-        "contents": "Welcome to use Git Repository Manager extension. \n You can clone a git repository. \n[Clone Repository](command:git-repository-manager.showGitRepoInputBox) \n Or you can select one of your repositories in the tree view below."
+        "contents": "Welcome to use Git Repository Manager extension. \n You can clone a git repository. \n[Clone Repository](command:git-repository-manager.showGitRepoInputBox) \n Or you can open one of your repositories in the tree view below."
       }
     ],
     "configuration": {
       "title": "Git Repository Manager",
-      "properties": {}
+      "properties": {
+        "git-repository-manager.baseDir": {
+          "type": "string",
+          "description": "Base directory for storing your repositories.",
+          "default": "~/Code"
+        },
+        "git-repository-manager.reposDirMap": {
+          "type": "object",
+          "description": "Extension will create a directory which is named with the domain of your git repository url. You can redefine the repository directories. For example: { \"github.com\": \"github\" }",
+          "default": {}
+        }
+      }
     }
   },
   "scripts": {

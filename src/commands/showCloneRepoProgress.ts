@@ -24,10 +24,22 @@ export function registryShowCloneRepoProgress() {
         return gitCloneSubprocess;
       }).then(
         () => {
-          vscode.window.showInformationMessage(`Clone ${gitRepoUrl} to ${localRepoPath} Successfully!`);
+          const confirmText = 'Yes';
+          vscode.window.showInformationMessage(
+            `Clone repository to ${localRepoPath} Successfully! Do you want open it?`,
+            confirmText,
+          ).then(res => {
+            if (res === confirmText) {
+              vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(localRepoPath), !!vscode.workspace.workspaceFolders);
+            }
+          });
         },
         (error: any) => {
-          vscode.window.showErrorMessage(`Clone ${gitRepoUrl} error: `, error);
+          if (gitCloneSubprocess.killed || error.isCanceled) {
+            vscode.window.showInformationMessage(`Cancel clone git repository ${gitRepoUrl}.`);
+            return;
+          }
+          vscode.window.showErrorMessage(`Clone ${gitRepoUrl} error: ${error.stderr}`);
         },
       );
     });
