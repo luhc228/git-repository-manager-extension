@@ -18,6 +18,11 @@
   "contributes": {
     "commands": [
       {
+        "command": "repoExplorer.search",
+        "title": "Search Repositories",
+        "icon": "$(search)"
+      },
+      {
         "command": "repoExplorer.refresh",
         "title": "Refresh Repositories",
         "icon": "$(refresh)"
@@ -60,9 +65,14 @@
     "menus": {
       "view/title": [
         {
+          "command": "repoExplorer.search",
+          "when": "view == repoExplorer",
+          "group": "navigation@10"
+        },
+        {
           "command": "repoExplorer.refresh",
           "when": "view == repoExplorer",
-          "group": "navigation"
+          "group": "navigation@11"
         }
       ],
       "view/item/context": [

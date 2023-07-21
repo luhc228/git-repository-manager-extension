@@ -9,8 +9,7 @@ export default async function getRepoBaseDir() {
     .getConfiguration()
     .get(BaseDirPropertyName) as string;
   if (!baseDir) {
-    await vscode.window.showErrorMessage(`Your configure property ${BaseDirPropertyName} is invalid. Extension expects non-empty string.`);
-    return;
+    throw new Error(`Your configure property ${BaseDirPropertyName} is invalid. Extension expects non-empty string.`);
   }
 
   const userHomeDir = os.homedir();

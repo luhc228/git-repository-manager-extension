@@ -3,6 +3,7 @@ import fse from 'fs-extra';
 import * as path from 'path';
 import getRepoBaseDir from '@/utils/getRepoBaseDir';
 import { isGitRepo } from '@/utils/git';
+import { getRepoPaths } from '@/utils/repoPaths';
 
 export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>, vscode.Disposable {
   private _onDidChangeTreeData: vscode.EventEmitter<RepoFolder | undefined | void> =
@@ -18,6 +19,50 @@ export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>
       vscode.commands.registerCommand('repoExplorer.openRepo', (repoFolder: RepoFolder) => {
         vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(repoFolder.path), !!vscode.workspace.workspaceFolders);
       }),
+      vscode.commands.registerCommand(
+        'repoExplorer.search',
+        async () => {
+          const repoBaseDir = await getRepoBaseDir();
+
+          const allRepoPaths = getRepoPaths() || [];
+          const repoGroupNameSet = new Set<string>();
+          allRepoPaths.forEach((repoPath) => {
+            // remove base dir from repo path
+            const gitUrl = repoPath.replace(new RegExp(`^${repoBaseDir}`), '');
+            // For example: github.com/gitlab
+            const repoGroupName = gitUrl.split(path.sep)[gitUrl.startsWith(path.sep) ? 1 : 0];
+            repoGroupNameSet.add(repoGroupName);
+          });
+
+          const quickPickItems: vscode.QuickPickItem[] = [];
+          repoGroupNameSet.forEach((repoGroupName) => {
+            quickPickItems.push({ label: repoGroupName, kind: vscode.QuickPickItemKind.Separator });
+            const repoPaths = allRepoPaths.filter(repoPath => {
+              return repoPath.startsWith(path.join(repoBaseDir, repoGroupName, path.sep));
+            });
+            repoPaths.forEach(repoPath => {
+              quickPickItems.push({
+                label: path.basename(repoPath),
+                description: repoPath,
+              });
+            });
+          });
+
+          const result = await vscode.window.showQuickPick(
+            quickPickItems,
+            {
+              placeHolder: 'Input your git repository name to filter.',
+              title: 'Select one of your git repositories to open.',
+            },
+          );
+
+          if (!result) {
+            return;
+          }
+
+          vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(result.description!), !!vscode.workspace.workspaceFolders);
+        },
+      ),
     );
   }
 
