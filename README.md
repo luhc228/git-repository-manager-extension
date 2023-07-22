@@ -67,7 +67,7 @@ Search your repositories easier.
 
 The directory path where will place your git repositories.
 
-### `git-repository-manager.reposDirMap`:
+### `git-repository-manager.reposDirMap`
 
 - type: `object`
 - default: `{}`
