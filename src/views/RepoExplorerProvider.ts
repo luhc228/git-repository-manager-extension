@@ -51,7 +51,7 @@ export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>
             quickPickItems,
             {
               placeHolder: 'Input your git repository name to filter.',
-              title: 'Select one of your git repositories to open.',
+              title: 'Select one of your git repositories to open it.',
             },
           );
 
