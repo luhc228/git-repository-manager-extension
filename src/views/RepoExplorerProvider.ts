@@ -3,7 +3,7 @@ import fse from 'fs-extra';
 import * as path from 'path';
 import getRepoBaseDir from '@/utils/getRepoBaseDir';
 import { isGitRepo } from '@/utils/git';
-import { getRepoPaths } from '@/utils/repoPaths';
+import findAllRepoPaths from '@/utils/findAllRepoPaths';
 
 export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>, vscode.Disposable {
   private _onDidChangeTreeData: vscode.EventEmitter<RepoFolder | undefined | void> =
@@ -23,8 +23,7 @@ export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>
         'repoExplorer.search',
         async () => {
           const repoBaseDir = await getRepoBaseDir();
-
-          const allRepoPaths = getRepoPaths() || [];
+          const allRepoPaths = await findAllRepoPaths();
           const repoGroupNameSet = new Set<string>();
           allRepoPaths.forEach((repoPath) => {
             // remove base dir from repo path
@@ -94,7 +93,7 @@ export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>
       const childPath = path.join(parentPath, dir);
       repoFolders.push(new RepoFolder(
         dir,
-        await isGitRepo(childPath) ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
+        isGitRepo(childPath) ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
         childPath,
       ));
     }

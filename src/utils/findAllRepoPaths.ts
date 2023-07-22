@@ -2,28 +2,28 @@ import * as path from 'path';
 import fse from 'fs-extra';
 import { isGitRepo } from './git';
 import getRepoBaseDir from './getRepoBaseDir';
-import { setRepoPaths } from './repoPaths';
 
 export default async function findAllRepoPaths() {
-  const set = new Set();
+  const set = new Set<string>();
 
   async function findRepoPath(parentPath?: string) {
-    if (!parentPath || !(await fse.pathExists(parentPath))) {
-      return;
-    }
-    if (await isGitRepo(parentPath)) {
-      set.add(parentPath);
-      setRepoPaths(Array.from(set) as string[]);
+    if (!parentPath || !(fse.pathExistsSync(parentPath))) {
       return;
     }
 
-    const childDirNames = await fse.readdir(parentPath);
+    if (isGitRepo(parentPath)) {
+      set.add(parentPath);
+      return;
+    }
+
+    const childDirNames = fse.readdirSync(parentPath);
     childDirNames.forEach((childDirName) => {
       findRepoPath(path.join(parentPath, childDirName));
     });
   }
 
   const repoBaseDir = await getRepoBaseDir();
+  await findRepoPath(repoBaseDir);
 
-  findRepoPath(repoBaseDir);
+  return Array.from(set);
 }

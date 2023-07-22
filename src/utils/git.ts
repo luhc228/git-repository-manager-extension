@@ -1,9 +1,6 @@
-import simpleGit from 'simple-git';
+import * as path from 'path';
+import fse from 'fs-extra';
 
-export async function isGitRepo(path: string) {
-  try {
-    return simpleGit(path).checkIsRepo();
-  } catch (error) {
-    return false;
-  }
+export function isGitRepo(dir: string) {
+  return fse.pathExistsSync(path.join(dir, '.git'));
 }

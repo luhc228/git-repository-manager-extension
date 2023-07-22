@@ -1,9 +1,8 @@
 import type { ExecaChildProcess } from 'execa';
 import * as vscode from 'vscode';
 import type { RepoExplorerProvider } from '@/views/RepoExplorerProvider';
-import findAllRepoPaths from '@/utils/findAllRepoPaths';
 
-export const CommandId = 'git-repository-manager.showCloneRepoProgress';
+export const CommandId = 'showCloneRepoProgress';
 
 export function registryShowCloneRepoProgress(repoExplorerProvider: RepoExplorerProvider) {
   return vscode.commands.registerCommand(
@@ -28,7 +27,6 @@ export function registryShowCloneRepoProgress(repoExplorerProvider: RepoExplorer
         () => {
           // Get latest local repo.
           repoExplorerProvider.refresh();
-          findAllRepoPaths();
 
           const confirmText = 'Yes';
           vscode.window.showInformationMessage(

@@ -18,6 +18,11 @@
   "contributes": {
     "commands": [
       {
+        "command": "showGitRepoInputBox",
+        "title": "Clone A Repository",
+        "icon": "$(add)"
+      },
+      {
         "command": "repoExplorer.search",
         "title": "Search Repositories",
         "icon": "$(search)"
@@ -59,20 +64,25 @@
     "viewsWelcome": [
       {
         "view": "welcome",
-        "contents": "Welcome to use Git Repository Manager extension. \n You can clone a git repository. \n[Clone Repository](command:git-repository-manager.showGitRepoInputBox) \n Or you can open one of your repositories in the tree view below."
+        "contents": "Welcome to use Git Repository Manager extension. \n You can clone a git repository. \n[Clone Repository](command:showGitRepoInputBox) \n Or you can open one of your repositories in the tree view below."
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "repoExplorer.search",
+          "command": "showGitRepoInputBox",
           "when": "view == repoExplorer",
           "group": "navigation@10"
         },
         {
-          "command": "repoExplorer.refresh",
+          "command": "repoExplorer.search",
           "when": "view == repoExplorer",
           "group": "navigation@11"
+        },
+        {
+          "command": "repoExplorer.refresh",
+          "when": "view == repoExplorer",
+          "group": "navigation@12"
         }
       ],
       "view/item/context": [
